@@ -10,9 +10,9 @@ import json
 
 SLACK_CHANNEL_ID = os.getenv("SLACK_CHHINAL_ID")
 SLACK_TOKEN = os.getenv("SLACK_TOKEN")
+
 # Create a logging file
 logging.basicConfig(filename="img_scrapper.log", level=logging.INFO)
-print("SLACK_CHANNEL_ID==",SLACK_CHANNEL_ID)
 app = Flask(__name__)
 
 # Enable CORS
@@ -22,69 +22,76 @@ CORS(app)
 def homepage():
     return render_template('index.html')
 
-# @app.route("/sendcomment", methods=["GET","POST"])
-# def sendMsg():
-#     thread_ts=None
-#     comment = (request.form['comment'])
-#     name = (request.form['nameInput'])
-#     response = requests.get()
+@app.route("/sendcomment", methods=["GET", "POST"])
+def sendMsg():
+    thread_ts = None
+    comment = request.form['comment']
+    name = request.form['nameInput']
+    print("comment", comment)
+    print("name", name)
+
+    # response = requests.get()
+    message_body = {
+        "text": f"Attention <!channel> :rotating_light: :rotating_light: {name} is Send Some message. Please check the thread for logs :eyes:"
+    }
+
+    print("message_body", message_body)
+    # Post initial message
+    response = requests.post(
+        "https://slack.com/api/chat.postMessage",
+        headers={
+            "Content-Type": "application/json; charset=utf-8",
+            "Authorization": f"Bearer {SLACK_TOKEN}"
+        },
+        json={
+            **message_body,
+            "channel": SLACK_CHANNEL_ID
+        }
+    )
+    print("response", response)
+    if response.ok:
+        thread_id = response.json().get("ts")
+
+        # Post messages in the thread
+        if comment:
+            request_body = {
+                "text": "failing scenarios",
+                "blocks": [
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": f"Hey Prashant , : {name} is sent a message"
+                        }
+                    },
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": f"Message ==> ```{json.dumps(comment)[:2800]}```"
+                        }
+                    }
+                ],
+                "channel": SLACK_CHANNEL_ID,
+                "thread_ts": thread_id
+            }
+
+            requests.post(
+                "https://slack.com/api/chat.postMessage",
+                headers={
+                    "Content-Type": "application/json; charset=utf-8",
+                    "Authorization": f"Bearer {SLACK_TOKEN}"
+                },
+                json=request_body
+            )
+    else:
+        print(f"Error posting initial message to Slack: {response.json()}")
     
-#     message_body = {
-#         "text": comment
-#     }
+    # Add the return statement here
+    return render_template("msg.html")
+    # return "Message sent successfully"
 
-#     # Post initial message
-#     response = requests.post(
-#         "https://slack.com/api/chat.postMessage",
-#         headers={
-#             "Content-Type": "application/json; charset=utf-8",
-#             "Authorization": f"Bearer {SLACK_TOKEN}"
-#         },
-#         json={
-#             **message_body,
-#             "channel": SLACK_CHANNEL_ID
-#         }
-#     )
-
-#     if response.ok:
-#         thread_id = response.json().get("ts")
-
-#         # Post messages in the thread
-#         for scenario in comment:
-#             request_body = {
-#                 "text": "failing scenarios",
-#                 "blocks": [
-#                     {
-#                         "type": "section",
-#                         "text": {
-#                             "type": "mrkdwn",
-#                             "text": f"Hey :exclamation: :exclamation: :exclamation: {name} sent a message"
-#                         }
-#                     },
-#                     {
-#                         "type": "section",
-#                         "text": {
-#                             "type": "mrkdwn",
-#                             "text": f"Message ==> ```{json.dumps(scenario)[:2800]}```"
-#                         }
-#                     }
-#                 ],
-#                 "channel": SLACK_CHANNEL_ID,
-#                 "thread_ts": thread_id
-#             }
-
-#             requests.post(
-#                 "https://slack.com/api/chat.postMessage",
-#                 headers={
-#                     "Content-Type": "application/json; charset=utf-8",
-#                     "Authorization": f"Bearer {SLACK_TOKEN}"
-#                 },
-#                 json=request_body
-#             )
-#     else:
-#         print(f"Error posting initial message to Slack: {response.json()}")
-    # pass
-
+# Your other routes remain unchanged...
 
 
 @app.route("/search", methods=["POST"])

@@ -747,6 +747,15 @@ nav.navbar.bootsnav .navbar-toggle i{color: #ff545a;}
 .comment-btn:hover {
     background-color: #2980b9;
 }
+
+/* Media Query for 800px screen size and below */
+@media only screen and (max-width: 850px) {
+    .comment-btn {
+        margin-right: center; /* Remove right margin on smaller screens */
+        margin-top: 30%;
+    }
+}
+
 /* End Comment and Send Section Styles */
 
 

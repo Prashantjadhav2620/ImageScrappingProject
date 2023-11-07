@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Status</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .message-container {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .redirect-message {
+            display: none;
+            color: #155724;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="message-container" id="messageContainer">
+        <p>Message sent successfully</p>
+    </div>
+
+    <div class="redirect-message" id="redirectMessage">
+        <p>Redirecting to home page in <span id="countdown">10</span> seconds...</p>
+    </div>
+
+    <script>
+        // Countdown timer
+        let seconds = 10;
+        const countdownElement = document.getElementById('countdown');
+        const redirectMessageElement = document.getElementById('redirectMessage');
+
+        function updateCountdown() {
+            countdownElement.textContent = seconds;
+            seconds--;
+
+            if (seconds < 0) {
+                clearInterval(countdownInterval);
+                // Redirect to home page
+                window.location.href = '/';
+            }
+        }
+
+        const countdownInterval = setInterval(updateCountdown, 1000);
+
+        // Show redirect message after 10 seconds
+        setTimeout(() => {
+            document.getElementById('messageContainer').style.display = 'none';
+            redirectMessageElement.style.display = 'block';
+        }, 10000);
+    </script>
+</body>
+
+</html>
