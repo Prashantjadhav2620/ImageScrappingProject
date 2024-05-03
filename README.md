@@ -18,11 +18,11 @@ To run this project locally, follow these steps:
         pip install -r requirements.txt
 
 
-pip install flask
-pip install flask_cors
-pip install python-dotenv
-pip install beautifulsoup4
-pip install requests
+   pip install flask
+   pip install flask_cors
+   pip install python-dotenv
+   pip install beautifulsoup4
+   pip install requests
 
 ## Usage
 
