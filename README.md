@@ -37,7 +37,8 @@ pip install requests
           python app.py
 
 3. Access the application in your web browser at
-        < http://localhost:3625 >
+
+         http://localhost:3625 
 
 ## Integration with Slack APIs
 
