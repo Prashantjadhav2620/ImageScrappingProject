@@ -113,6 +113,7 @@ def index():
             # Search for the images 
             response = requests.get(f"https://www.google.com/search?q={query}&sxsrf=AJOqlzUuff1RXi2mm8I_OqOwT9VjfIDL7w:1676996143273&source=lnms&tbm=isch&sa=X&ved=2ahUKEwiq-qK7gaf9AhXUgVYBHYReAfYQ_AUoA3oECAEQBQ&biw=1920&bih=937&dpr=1#imgrc=1th7VhSesfMJ4M")
             
+            print("response",response)
             # Apply Beautiful Soup to the response
             Beautiful_soup = BeautifulSoup(response.text, "html.parser")
             
@@ -167,5 +168,5 @@ def index():
         return render_template('index.html')
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=9089, debug=True)
+    app.run(host="0.0.0.0", port=3625, debug=True)
 
